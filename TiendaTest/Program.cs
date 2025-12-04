@@ -43,10 +43,7 @@
 
             //var categoriaActualizada = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelosTienda.ApiResult<ModelosTienda.Categoria>>(json);
 
-            ////Eliminar datos
-            //response = httpClient.DeleteAsync($"{rutaCategorias}/{categoriaCreada.Data.Id}").Result;
-            //json = response.Content.ReadAsStringAsync().Result;
-            //var categoriaEliminada = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelosTienda.ApiResult<ModelosTienda.Categoria>>(json);
+            
 
             Console.WriteLine(json);
             Console.ReadLine();

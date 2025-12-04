@@ -17,8 +17,7 @@ namespace ModelosTienda
     */
 
     public class Categoria
-    {
-        
+    { 
         [Key] public int Id { get; set; }
 
         public string Nombre_Categ { get; set; }
@@ -28,6 +27,5 @@ namespace ModelosTienda
 
         // Objeto de Navegación //
         public List<Producto>? Productos { get; set; }= new List<Producto>();
-
     }
 }
