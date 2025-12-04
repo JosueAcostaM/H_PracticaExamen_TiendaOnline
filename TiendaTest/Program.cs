@@ -21,10 +21,11 @@
             var nuevaCategoria = new ModelosTienda.Categoria()
             {
                 Id = 0,
-                Nombre = "Laptop"
+                Nombre_Categ = "Laptop",
+                Descripcion = "Laptos de gama media"
             };
 
-            //Invocar el serico web para insettar la nueva especie
+            //Invocar el serico web para insettar la nueva categoria
             var categoriaJson = Newtonsoft.Json.JsonConvert.SerializeObject(nuevaCategoria);
             var content = new StringContent(categoriaJson, System.Text.Encoding.UTF8, "application/json");
             response = httpClient.PostAsync(rutaCategorias, content).Result;
@@ -34,18 +35,18 @@
             var categoriaCreada = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelosTienda.ApiResult<ModelosTienda.Categoria>>(json);
 
             //Actualizacion de datos
-            categoriaCreada.Data.Nombre = "Laptop actualizado";
-            categoriaJson = Newtonsoft.Json.JsonConvert.SerializeObject(categoriaCreada.Data);
-            content = new StringContent(categoriaJson, System.Text.Encoding.UTF8, "application/json");
-            response = httpClient.PutAsync($"{rutaCategorias}/{categoriaCreada.Data.Id}", content).Result;
-            json = response.Content.ReadAsStringAsync().Result;
+            //categoriaCreada.Data.Nombre_Categ = "Laptop actualizado";
+            //categoriaJson = Newtonsoft.Json.JsonConvert.SerializeObject(categoriaCreada.Data);
+            //content = new StringContent(categoriaJson, System.Text.Encoding.UTF8, "application/json");
+            //response = httpClient.PutAsync($"{rutaCategorias}/{categoriaCreada.Data.Id}", content).Result;
+            //json = response.Content.ReadAsStringAsync().Result;
 
-            var categoriaActualizada = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelosTienda.ApiResult<ModelosTienda.Categoria>>(json);
+            //var categoriaActualizada = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelosTienda.ApiResult<ModelosTienda.Categoria>>(json);
 
-            //Eliminar datos
-            response = httpClient.DeleteAsync($"{rutaCategorias}/{categoriaCreada.Data.Id}").Result;
-            json = response.Content.ReadAsStringAsync().Result;
-            var categoriaEliminada = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelosTienda.ApiResult<ModelosTienda.Categoria>>(json);
+            ////Eliminar datos
+            //response = httpClient.DeleteAsync($"{rutaCategorias}/{categoriaCreada.Data.Id}").Result;
+            //json = response.Content.ReadAsStringAsync().Result;
+            //var categoriaEliminada = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelosTienda.ApiResult<ModelosTienda.Categoria>>(json);
 
             Console.WriteLine(json);
             Console.ReadLine();

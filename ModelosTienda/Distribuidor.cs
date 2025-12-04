@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace ModelosTienda
 {
-    public class Categoria
+    public class Distribuidor
     {
         [Key] public int Id { get; set; }
-        public string Nombre_Categ { get; set; }
-        public string Descripcion { get; set;}
 
-        public List<Producto> Productos { get; set; }= new List<Producto>();
-
+        public string Nombre_Distrib { get; set; }
+        public int Cantidad_Produc {  get; set; }
+        public List<Producto> Productos { get; set; } = new List<Producto>();
     }
 }

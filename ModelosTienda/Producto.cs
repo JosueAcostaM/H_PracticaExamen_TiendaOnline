@@ -10,7 +10,7 @@ namespace ModelosTienda
     public class Producto
     {
         [Key] public int Id { get; set; }
-        public string Nombre { get; set; }
+        public string Nombre_Prod { get; set; }
         
         public int Stock { get; set; }
 

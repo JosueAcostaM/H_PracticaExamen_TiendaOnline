@@ -19,5 +19,6 @@ namespace Api_TiendaOnline.Data
         public DbSet<ModelosTienda.DetallePedido> DetallePedidos { get; set; } = default!;
         public DbSet<ModelosTienda.Pedido> Pedidos { get; set; } = default!;
         public DbSet<ModelosTienda.Producto> Productos { get; set; } = default!;
+        public DbSet<ModelosTienda.Distribuidor> Distribuidor { get; set; } = default!;
     }
 }

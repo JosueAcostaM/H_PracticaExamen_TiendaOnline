@@ -34,7 +34,7 @@ namespace Api_TiendaOnline.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("Nombre_Categ")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -55,7 +55,7 @@ namespace Api_TiendaOnline.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("Nombre_Client")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -91,6 +91,26 @@ namespace Api_TiendaOnline.Migrations
                     b.HasIndex("ProductoId");
 
                     b.ToTable("DetallePedidos");
+                });
+
+            modelBuilder.Entity("ModelosTienda.Distribuidor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cantidad_Produc")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Nombre_Distrib")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Distribuidor");
                 });
 
             modelBuilder.Entity("ModelosTienda.Pedido", b =>
@@ -132,10 +152,13 @@ namespace Api_TiendaOnline.Migrations
                     b.Property<int?>("CategoriaId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("DistribuidorId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("IdCategoria")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("Nombre_Prod")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -148,6 +171,8 @@ namespace Api_TiendaOnline.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoriaId");
+
+                    b.HasIndex("DistribuidorId");
 
                     b.ToTable("Productos");
                 });
@@ -182,6 +207,10 @@ namespace Api_TiendaOnline.Migrations
                         .WithMany("Productos")
                         .HasForeignKey("CategoriaId");
 
+                    b.HasOne("ModelosTienda.Distribuidor", null)
+                        .WithMany("Productos")
+                        .HasForeignKey("DistribuidorId");
+
                     b.Navigation("Categoria");
                 });
 
@@ -193,6 +222,11 @@ namespace Api_TiendaOnline.Migrations
             modelBuilder.Entity("ModelosTienda.Cliente", b =>
                 {
                     b.Navigation("Pedidos");
+                });
+
+            modelBuilder.Entity("ModelosTienda.Distribuidor", b =>
+                {
+                    b.Navigation("Productos");
                 });
 #pragma warning restore 612, 618
         }

@@ -18,7 +18,7 @@ namespace Api_TiendaOnline.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nombre = table.Column<string>(type: "text", nullable: false),
+                    Nombre_Categ = table.Column<string>(type: "text", nullable: false),
                     Descripcion = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -32,7 +32,7 @@ namespace Api_TiendaOnline.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nombre = table.Column<string>(type: "text", nullable: false),
+                    Nombre_Client = table.Column<string>(type: "text", nullable: false),
                     Correo = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -41,25 +41,17 @@ namespace Api_TiendaOnline.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Productos",
+                name: "Distribuidor",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nombre = table.Column<string>(type: "text", nullable: false),
-                    Stock = table.Column<int>(type: "integer", nullable: false),
-                    PrecioUnitario = table.Column<float>(type: "real", nullable: false),
-                    IdCategoria = table.Column<int>(type: "integer", nullable: false),
-                    CategoriaId = table.Column<int>(type: "integer", nullable: true)
+                    Nombre_Distrib = table.Column<string>(type: "text", nullable: false),
+                    Cantidad_Produc = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Productos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Productos_Categorias_CategoriaId",
-                        column: x => x.CategoriaId,
-                        principalTable: "Categorias",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_Distribuidor", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,6 +72,34 @@ namespace Api_TiendaOnline.Migrations
                         name: "FK_Pedidos_Clientes_ClienteId",
                         column: x => x.ClienteId,
                         principalTable: "Clientes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Productos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nombre_Prod = table.Column<string>(type: "text", nullable: false),
+                    Stock = table.Column<int>(type: "integer", nullable: false),
+                    PrecioUnitario = table.Column<float>(type: "real", nullable: false),
+                    IdCategoria = table.Column<int>(type: "integer", nullable: false),
+                    CategoriaId = table.Column<int>(type: "integer", nullable: true),
+                    DistribuidorId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Productos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Productos_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Productos_Distribuidor_DistribuidorId",
+                        column: x => x.DistribuidorId,
+                        principalTable: "Distribuidor",
                         principalColumn: "Id");
                 });
 
@@ -128,6 +148,11 @@ namespace Api_TiendaOnline.Migrations
                 name: "IX_Productos_CategoriaId",
                 table: "Productos",
                 column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Productos_DistribuidorId",
+                table: "Productos",
+                column: "DistribuidorId");
         }
 
         /// <inheritdoc />
@@ -147,6 +172,9 @@ namespace Api_TiendaOnline.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categorias");
+
+            migrationBuilder.DropTable(
+                name: "Distribuidor");
         }
     }
 }
