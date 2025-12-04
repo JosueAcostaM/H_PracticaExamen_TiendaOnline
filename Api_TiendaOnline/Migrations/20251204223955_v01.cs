@@ -46,8 +46,7 @@ namespace Api_TiendaOnline.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nombre_Distrib = table.Column<string>(type: "text", nullable: false),
-                    Cantidad_Produc = table.Column<int>(type: "integer", nullable: false)
+                    Nombre_Distrib = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,6 +108,7 @@ namespace Api_TiendaOnline.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CantidadComprada = table.Column<int>(type: "integer", nullable: false),
                     IdPedido = table.Column<int>(type: "integer", nullable: false),
                     IdProducto = table.Column<int>(type: "integer", nullable: false),
                     PedidoId = table.Column<int>(type: "integer", nullable: true),
@@ -124,6 +124,34 @@ namespace Api_TiendaOnline.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_DetallePedidos_Productos_ProductoId",
+                        column: x => x.ProductoId,
+                        principalTable: "Productos",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Suministro",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CantidadEntregada = table.Column<int>(type: "integer", nullable: false),
+                    FechaSuministro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IdDistribuidor = table.Column<int>(type: "integer", nullable: false),
+                    IdProducto = table.Column<int>(type: "integer", nullable: false),
+                    DistribuidorId = table.Column<int>(type: "integer", nullable: true),
+                    ProductoId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Suministro", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Suministro_Distribuidor_DistribuidorId",
+                        column: x => x.DistribuidorId,
+                        principalTable: "Distribuidor",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Suministro_Productos_ProductoId",
                         column: x => x.ProductoId,
                         principalTable: "Productos",
                         principalColumn: "Id");
@@ -153,6 +181,16 @@ namespace Api_TiendaOnline.Migrations
                 name: "IX_Productos_DistribuidorId",
                 table: "Productos",
                 column: "DistribuidorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Suministro_DistribuidorId",
+                table: "Suministro",
+                column: "DistribuidorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Suministro_ProductoId",
+                table: "Suministro",
+                column: "ProductoId");
         }
 
         /// <inheritdoc />
@@ -160,6 +198,9 @@ namespace Api_TiendaOnline.Migrations
         {
             migrationBuilder.DropTable(
                 name: "DetallePedidos");
+
+            migrationBuilder.DropTable(
+                name: "Suministro");
 
             migrationBuilder.DropTable(
                 name: "Pedidos");

@@ -72,6 +72,9 @@ namespace Api_TiendaOnline.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CantidadComprada")
+                        .HasColumnType("integer");
+
                     b.Property<int>("IdPedido")
                         .HasColumnType("integer");
 
@@ -100,9 +103,6 @@ namespace Api_TiendaOnline.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Cantidad_Produc")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Nombre_Distrib")
                         .IsRequired()
@@ -177,10 +177,45 @@ namespace Api_TiendaOnline.Migrations
                     b.ToTable("Productos");
                 });
 
+            modelBuilder.Entity("ModelosTienda.Suministro", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CantidadEntregada")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("DistribuidorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("FechaSuministro")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("IdDistribuidor")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdProducto")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProductoId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DistribuidorId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("Suministro");
+                });
+
             modelBuilder.Entity("ModelosTienda.DetallePedido", b =>
                 {
                     b.HasOne("ModelosTienda.Pedido", "Pedido")
-                        .WithMany()
+                        .WithMany("DetallesPedido")
                         .HasForeignKey("PedidoId");
 
                     b.HasOne("ModelosTienda.Producto", "Producto")
@@ -214,6 +249,21 @@ namespace Api_TiendaOnline.Migrations
                     b.Navigation("Categoria");
                 });
 
+            modelBuilder.Entity("ModelosTienda.Suministro", b =>
+                {
+                    b.HasOne("ModelosTienda.Distribuidor", "Distribuidor")
+                        .WithMany("Suministros")
+                        .HasForeignKey("DistribuidorId");
+
+                    b.HasOne("ModelosTienda.Producto", "Producto")
+                        .WithMany("Suministros")
+                        .HasForeignKey("ProductoId");
+
+                    b.Navigation("Distribuidor");
+
+                    b.Navigation("Producto");
+                });
+
             modelBuilder.Entity("ModelosTienda.Categoria", b =>
                 {
                     b.Navigation("Productos");
@@ -227,6 +277,18 @@ namespace Api_TiendaOnline.Migrations
             modelBuilder.Entity("ModelosTienda.Distribuidor", b =>
                 {
                     b.Navigation("Productos");
+
+                    b.Navigation("Suministros");
+                });
+
+            modelBuilder.Entity("ModelosTienda.Pedido", b =>
+                {
+                    b.Navigation("DetallesPedido");
+                });
+
+            modelBuilder.Entity("ModelosTienda.Producto", b =>
+                {
+                    b.Navigation("Suministros");
                 });
 #pragma warning restore 612, 618
         }

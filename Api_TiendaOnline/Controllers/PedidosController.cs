@@ -45,6 +45,8 @@ namespace Api_TiendaOnline.Controllers
                 var pedido = await _context
                     .Pedidos
                     .Include(e => e.Cliente)
+                    .Include(e => e.DetallesPedido)!
+                        .ThenInclude(d => d.Producto)
                     .FirstOrDefaultAsync(e => e.Id == id);
 
                 if (pedido == null)
@@ -61,7 +63,6 @@ namespace Api_TiendaOnline.Controllers
         }
 
         // PUT: api/Pedidos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<ActionResult<ApiResult<Pedido>>> PutPedido(int id, Pedido pedido)
         {
@@ -91,21 +92,24 @@ namespace Api_TiendaOnline.Controllers
             return ApiResult<Pedido>.Ok(null);
         }
 
+
         // POST: api/Pedidos
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ApiResult<Pedido>>> PostPedido(Pedido pedido)
         {
+            
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
             try
             {
                 _context.Pedidos.Add(pedido);
                 await _context.SaveChangesAsync();
-
                 return ApiResult<Pedido>.Ok(pedido);
             }
             catch (Exception ex)
             {
-                return ApiResult<Pedido>.Fail(ex.Message);
+                transaction.Rollback();
+                return ApiResult<Pedido>.Fail($"Error al procesar el pedido y el stock: {ex.Message}");
             }
         }
 

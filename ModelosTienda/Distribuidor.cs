@@ -7,12 +7,26 @@ using System.Threading.Tasks;
 
 namespace ModelosTienda
 {
+
+    /*
+    * Clase: Distribuidor
+    * Descripción: Representa a una compañía o persona que provee productos a la tienda.
+    * Contiene información básica del distribuidor y una lista de los productos que suministra.
+    * Autor: [Josué Acosta]
+    * Versión: Final
+    */
+
     public class Distribuidor
     {
+
         [Key] public int Id { get; set; }
 
         public string Nombre_Distrib { get; set; }
-        public int Cantidad_Produc {  get; set; }
-        public List<Producto> Productos { get; set; } = new List<Producto>();
+
+
+        // Objeto de Navegación (Colección) //
+
+        public List<Producto>? Productos { get; set; } = new List<Producto>();
+        public List<Suministro>? Suministros { get; set; } = new List<Suministro>();
     }
 }

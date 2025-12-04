@@ -96,16 +96,37 @@ namespace Api_TiendaOnline.Controllers
         [HttpPost]
         public async Task<ActionResult<ApiResult<DetallePedido>>> PostDetallePedido(DetallePedido detallePedido)
         {
+
             try
             {
+                if (detallePedido.CantidadComprada <= 0)
+                {
+                    return ApiResult<DetallePedido>.Fail("La cantidad comprada debe ser mayor a cero.");
+                }
+
+                var producto = await _context.Productos.FindAsync(detallePedido.IdProducto);
+
+                if (producto == null)
+                {
+                    return ApiResult<DetallePedido>.Fail($"Producto con ID {detallePedido.IdProducto} no encontrado.");
+                }
+
+                if (producto.Stock < detallePedido.CantidadComprada)
+                {
+                    return ApiResult<DetallePedido>.Fail($"Stock insuficiente para el producto '{producto.Nombre_Prod}'. Stock disponible: {producto.Stock}");
+                }
+
                 _context.DetallePedidos.Add(detallePedido);
+                producto.Stock -= detallePedido.CantidadComprada;
+                _context.Entry(producto).State = EntityState.Modified;
+
                 await _context.SaveChangesAsync();
 
                 return ApiResult<DetallePedido>.Ok(detallePedido);
             }
             catch (Exception ex)
             {
-                return ApiResult<DetallePedido>.Fail(ex.Message);
+                return ApiResult<DetallePedido>.Fail($"Error al registrar el detalle y actualizar el stock: {ex.Message}");
             }
         }
 
