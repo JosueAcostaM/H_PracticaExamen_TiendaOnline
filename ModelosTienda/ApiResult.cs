@@ -20,7 +20,7 @@ namespace ModelosTienda
                 Data = data
             };
         }
-
+        
         public static ApiResult<T> Fail(string message)
         {
             return new ApiResult<T>
