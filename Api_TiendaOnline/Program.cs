@@ -1,6 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Api_TiendaOnline.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Api_TiendaOnline.Data;
+using Serilog;
+
+
+//==============================================================
+// Configurar Serilog leyendo desde appsettings.json
+//==============================================================
+var config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(config)
+    .CreateLogger();
+
+Log.Information("Iniciado el proceso de actualización de estados de solicitudes.");
+
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Api_TiendaOnlineContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Api_Tienda.Postgres") ?? throw new InvalidOperationException("Connection string 'Api_TiendaOnlineContext' not found."))
